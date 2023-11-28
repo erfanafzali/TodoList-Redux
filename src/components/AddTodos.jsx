@@ -1,16 +1,17 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addTodo } from "../features/todo/todoSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addAsyncTodo } from "../features/todo/todoSlice";
 
 function AddTodos() {
   const [value, setValue] = useState("");
+  const { loading } = useSelector((state) => state.todos);
 
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!value) return;
-    dispatch(addTodo({ title: value }));
+    dispatch(addAsyncTodo({ title: value }));
     setValue("");
   };
 
@@ -31,15 +32,16 @@ function AddTodos() {
             onChange={(e) => setValue(e.target.value)}
             id="name"
             type="text"
-            placeholder="Write your todo..." 
+            placeholder="Write your todo..."
             className="w-full pb-0.5 md:py-1 lg:py-1.5 rounded-lg outline-0 border-0 px-2 sm:px-3 md:px-4 lg:px-5 font-bold text-slate-900 placeholder:text-xs placeholder:font-normal placeholder:md:text-base"
           />
         </div>
         <div className="w-full  flex font-bold justify-center items-center pt-3 sm:pt-4 md:pt-5 lg:pt-6">
           <button
+            disabled={loading}
             type="submit"
             className="bg-slate-800 text-sm sm:text-base md:text-lg lg:text-xl text-slate-200 rounded-lg px-3 sm:px-5 md:px-7 lg:px-9 py-1 sm:py-2 md:py-3 ">
-            Submit
+            {loading ? "submitting..." : "submit"}
           </button>
         </div>
       </form>
